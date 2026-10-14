@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.documentElement.classList.add('js');</script>
+  <title>Caveman vs Aliens — Official Android Game Website</title>
+  <meta name="description" content="Caveman vs Aliens is a fast, colorful arcade Android game where a lone caveman fights back an alien invasion — with optional voice commands. Coming to Google Play.">
+  <link rel="canonical" href="https://example.com/">
+
+  <!-- Open Graph (placeholders — update image URL and final domain before publishing) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Caveman vs Aliens">
+  <meta property="og:title" content="Caveman vs Aliens — Official Android Game Website">
+  <meta property="og:description" content="Survive the invasion. Fight back. Go prehistoric. A fast, colorful arcade game for Android — coming to Google Play.">
+  <meta property="og:image" content="assets/images/placeholders/hero-placeholder.svg">
+  <meta property="og:url" content="https://example.com/">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="hero-art-nav">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- On this page the floating header's own nav pill is hidden at the
+       widths where hero-final.png shows its own baked nav pill (see
+       body.hero-art-nav rules in style.css), so the two never appear
+       stacked. The hamburger/mobile menu below it is untouched and stays
+       the real navigation at narrower widths, where the artwork's pill
+       isn't in frame. -->
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary">
+      <ul class="nav-links">
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li>
+          <button class="nav-link-btn" type="button" data-open-trailer>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            See It in Action
+          </button>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <button
+          class="nav-toggle"
+          type="button"
+          data-nav-toggle
+          aria-expanded="false"
+          aria-controls="mobileMenu"
+          aria-label="Toggle menu"
+        >
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu" data-mobile-menu>
+      <ul>
+        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+        <li>
+          <button class="nav-link-btn" type="button" data-open-trailer>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            See It in Action
+          </button>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===================== HERO =====================
+         hero-final.png is the approved visual source of truth: it already
+         bakes in the logo, headline, tagline, nav styling and Google Play
+         button, so no HTML text/CTA is drawn on top of it. Real, functional,
+         keyboard-accessible controls are layered over the image instead —
+         pixel-aligned to what the artwork shows (desktop/tablet), with an
+         accessible name but no visible duplicate label. A visually-hidden
+         <h1> carries the page's real heading text for screen readers and
+         SEO, since the headline is pixels, not text, inside the image. -->
+    <section class="hero">
+      <div class="hero-frame">
+        <picture>
+          <source srcset="assets/images/hero-final.webp" type="image/webp">
+          <img
+            class="hero-frame-img"
+            src="assets/images/hero-final.png"
+            alt=""
+            width="1997" height="788"
+            loading="eager"
+          >
+        </picture>
+        <!-- Mobile-only (<700px): object-fit: cover can only crop ONE axis
+             per breakpoint (whichever isn't the binding constraint), which
+             is why the <img> above can't also crop the baked nav pill out
+             vertically on top of its horizontal crop. A background-image
+             with explicit two-axis background-size does both at once. The
+             <img> above is hidden at this width instead (see style.css),
+             so there's no visible duplication. -->
+        <div class="hero-frame-mobile-bg" aria-hidden="true"></div>
+
+        <h1 class="visually-hidden">
+          Caveman vs Aliens — The aliens woke the wrong caveman. Silly aliens
+          woke a sleeping caveman — now he's sending them back to space!
+        </h1>
+
+        <!-- Invisible, pixel-aligned hit areas over the nav pill baked into
+             the artwork. Shown only where that pill is actually in frame
+             (desktop/tablet ≥860px); below that the real hamburger menu in
+             the site header already provides this navigation, so these are
+             hidden rather than duplicated. -->
+        <nav class="hero-overlay-nav" aria-label="Primary">
+          <a class="hero-hotspot hero-hotspot-home" href="index.html" aria-current="page">
+            <span class="visually-hidden">Home</span>
+          </a>
+          <a class="hero-hotspot hero-hotspot-privacy" href="privacy.html">
+            <span class="visually-hidden">Privacy</span>
+          </a>
+          <button class="hero-hotspot hero-hotspot-trailer" type="button" data-open-trailer aria-haspopup="dialog">
+            <span class="visually-hidden">See It in Action</span>
+          </button>
+        </nav>
+
+        <!-- Invisible hit area over the baked Google Play button — aligned
+             at every breakpoint, since the button stays in frame through
+             every crop. -->
+        <button class="hero-hotspot hero-hotspot-play" type="button" data-open-play aria-haspopup="dialog">
+          <span class="visually-hidden">Get it on Google Play</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================== GAME FEATURES (Phase C / C.1) =====================
+         Three panels forming one continuous feature band under the Hero.
+         Voice Commands (C.1): the approved final artwork
+         (assets/images/panels/voice-commands-final.png) is the whole panel
+         face, shown once and used exactly as supplied. All of its visible
+         text (title, copy, BANANA, BOOM) is baked into the image, so the
+         <img> is decorative (a <picture> swaps in a mobile-only
+         recomposition of the SAME artwork under 700px) and equivalent text lives in a visually-hidden
+         block for screen readers/SEO. The panel is deliberately NOT a
+         button: the tutorial video does not exist yet, so there is no click
+         action. [data-voice-tutorial-hook] marks where the future video
+         phase will make the panel a keyboard-accessible control.
+
+         Dinosaurs (C.2): same approach as Voice — the approved
+         dinosaurs-final.png carries its own title + sentence, so it is a
+         decorative <img> with equivalent visually-hidden text, in a plain
+         non-interactive <article>. Power-Ups (C.3): same approach — the approved
+         powerups-final.png carries its own title, sentence and power-up
+         icons, so it is a decorative <img> with equivalent visually-hidden
+         text, in a plain non-interactive <article>. -->
+    <section class="features" aria-labelledby="featuresHeading">
+      <h2 id="featuresHeading" class="visually-hidden">Game Features</h2>
+      <div class="features-band">
+
+        <article class="feature-panel feature-panel-voice reveal" data-voice-tutorial-hook>
+          <span class="feature-art feature-art-voice" aria-hidden="true">
+            <picture>
+              <source media="(max-width: 699px)" srcset="assets/images/panels/voice-commands-mobile.webp" type="image/webp" width="1223" height="1466">
+              <source media="(max-width: 699px)" srcset="assets/images/panels/voice-commands-mobile.png" width="1223" height="1466">
+              <source srcset="assets/images/panels/voice-commands-final.webp" type="image/webp">
+              <img src="assets/images/panels/voice-commands-final.png" alt="" width="2080" height="756" loading="lazy" decoding="async">
+            </picture>
+          </span>
+          <div class="visually-hidden">
+            <h3>Voice Commands</h3>
+            <p>Use your voice to trigger powerful actions!</p>
+            <ul>
+              <li><strong>BANANA</strong> — Throw bananas!</li>
+              <li><strong>BOOM</strong> — Get your club!</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="feature-panel feature-panel-dino reveal" data-feature="dinosaurs">
+          <span class="feature-art feature-art-dino" aria-hidden="true">
+            <picture>
+              <source srcset="assets/images/panels/dinosaurs-final.webp" type="image/webp">
+              <img src="assets/images/panels/dinosaurs-final.png" alt="" width="1787" height="880" loading="lazy" decoding="async">
+            </picture>
+          </span>
+          <div class="visually-hidden">
+            <h3>Dinosaurs &amp; Crazy Challenges</h3>
+            <p>Dodge and fight dinosaurs in a wild prehistoric world!</p>
+          </div>
+        </article>
+
+        <article class="feature-panel feature-panel-power reveal" data-feature="power-ups">
+          <span class="feature-art feature-art-power" aria-hidden="true">
+            <picture>
+              <source srcset="assets/images/panels/powerups-final.webp" type="image/webp">
+              <img src="assets/images/panels/powerups-final.png" alt="" width="1774" height="887" loading="lazy" decoding="async">
+            </picture>
+          </span>
+          <div class="visually-hidden">
+            <h3>Power-Ups from Space</h3>
+            <p>Catch gifts from UFOs to get special power-ups!</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ===================== GAMEPLAY (Phase D.2) =====================
+         ONE carousel only. CSS-first: the track is a native horizontally
+         scrolling, scroll-snapping flex row (works by swipe/trackpad/wheel
+         with no JS); main.js only adds the Prev/Next buttons, their
+         disabled state and arrow-key support. -->
+    <section class="section gameplay" id="gameplay" aria-labelledby="gameplayHeading">
+      <div class="container gp-container">
+        <h2 class="gp-title reveal" id="gameplayHeading">
+          <span class="gp-name">Gameplay</span>
+          <span class="gp-tagline">Fast, fun and full of surprises</span>
+        </h2>
+
+        <div class="gp reveal" data-carousel role="region" aria-roledescription="carousel" aria-label="Gameplay">
+          <!-- HOW TO ADD A SCREENSHOT LATER (no CSS/JS changes needed):
+               1. Put the image in assets/images/gameplay/ (e.g. gameplay-real-01.png).
+               2. Copy ONE <li class="gp-slide"> block below, paste it at the END of
+                  this list, and change: data-kind="real", the img src, its
+                  width/height and the alt text (describe what is on screen).
+               Same list, same carousel — slide order is simply the order here. -->
+          <ul class="gp-track" data-carousel-track>
+          <li class="gp-slide" data-kind="real">
+            <figure class="gp-card">
+              <picture>
+                <source srcset="assets/images/gameplay/gameplay-real-01.webp" type="image/webp">
+                <img src="assets/images/gameplay/gameplay-real-01.jpg" alt="Caveman running past a giant lava tree toward aliens and a green dinosaur, with a BANANA shout bubble on screen" width="1260" height="709" loading="lazy" decoding="async">
+              </picture>
+            </figure>
+          </li>
+          <li class="gp-slide" data-kind="real">
+            <figure class="gp-card">
+              <picture>
+                <source srcset="assets/images/gameplay/gameplay-real-02.webp" type="image/webp">
+                <img src="assets/images/gameplay/gameplay-real-02.jpg" alt="A green dinosaur charging along the ground while a small tornado spins near purple aliens and a nest-topped tree" width="1260" height="709" loading="lazy" decoding="async">
+              </picture>
+            </figure>
+          </li>
+          <li class="gp-slide" data-kind="real">
+            <figure class="gp-card">
+              <picture>
+                <source srcset="assets/images/gameplay/gameplay-real-03.webp" type="image/webp">
+                <img src="assets/images/gameplay/gameplay-real-03.jpg" alt="Caveman facing a raptor and purple aliens as a parachute gift drifts down over the prehistoric valley" width="1260" height="709" loading="lazy" decoding="async">
+              </picture>
+            </figure>
+          </li>
+          <li class="gp-slide" data-kind="real">
+            <figure class="gp-card">
+              <picture>
+                <source srcset="assets/images/gameplay/gameplay-real-04.webp" type="image/webp">
+                <img src="assets/images/gameplay/gameplay-real-04.jpg" alt="Caveman dashing in a cloud of dust and sparks, scoring +2 on a purple alien in front of lava volcanoes" width="1260" height="709" loading="lazy" decoding="async">
+              </picture>
+            </figure>
+          </li>
+          <li class="gp-slide" data-kind="real">
+            <figure class="gp-card">
+              <picture>
+                <source srcset="assets/images/gameplay/gameplay-real-05.webp" type="image/webp">
+                <img src="assets/images/gameplay/gameplay-real-05.jpg" alt="Caveman on grassy platforms heading toward purple aliens as a parachute gift drops beneath a UFO" width="1260" height="709" loading="lazy" decoding="async">
+              </picture>
+            </figure>
+          </li>
+          <li class="gp-slide" data-kind="real">
+            <figure class="gp-card">
+              <picture>
+                <source srcset="assets/images/gameplay/gameplay-real-06.webp" type="image/webp">
+                <img src="assets/images/gameplay/gameplay-real-06.jpg" alt="Caveman running along grassy platforms as a parachute gift drifts down and a green dinosaur enters from the left" width="1260" height="709" loading="lazy" decoding="async">
+              </picture>
+            </figure>
+          </li>
+          </ul>
+
+          <button class="gp-btn gp-prev" type="button" data-carousel-prev aria-label="Previous gameplay image">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <button class="gp-btn gp-next" type="button" data-carousel-next aria-label="Next gameplay image">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+
+        <p class="gp-bridge reveal">Fun for all ages</p>
+      </div>
+    </section>
+
+    <!-- ===================== CTA BAND ===================== -->
+    <section class="section cta-band">
+      <div class="container reveal">
+        <p class="eyebrow" style="justify-content:center; display:flex;">AVAILABLE ON ANDROID</p>
+        <h2 class="section-title">Now on Google Play</h2>
+        <p class="section-lead">Download Caveman vs Aliens on Android and start playing today.</p>
+        <div class="hero-actions">
+          <button class="btn btn-play" type="button" data-open-play aria-haspopup="dialog">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 3.5c0-.83.92-1.34 1.62-.9l14.5 8.5c.66.39.66 1.34 0 1.73l-14.5 8.5c-.7.44-1.62-.07-1.62-.9v-17z"/></svg>
+            <span class="btn-play-text">
+              <span class="btn-play-kicker">Get it on</span>
+              <span class="btn-play-main">Google Play</span>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">CA</span>
+        CAVEMAN VS ALIENS
+      </div>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="privacy.html">Privacy Policy</a>
+      </nav>
+      <p class="footer-meta">© 2026 Oren Shatil. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ===================== GOOGLE PLAY MODAL (Phase 2) =====================
+       Desktop entry point for the Google Play CTA. On mobile, if a real
+       store URL is set, the CTA skips this modal and navigates directly
+       to the store instead (see assets/js/main.js). Until a real URL
+       exists, this always shows the safe "Coming Soon" state below. -->
+  <div class="modal-overlay" id="googlePlayModal" role="dialog" aria-modal="true" aria-labelledby="googlePlayModalTitle">
+    <div class="modal-card">
+      <button class="modal-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <div class="modal-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 3.5c0-.83.92-1.34 1.62-.9l14.5 8.5c.66.39.66 1.34 0 1.73l-14.5 8.5c-.7.44-1.62-.07-1.62-.9v-17z"/></svg>
+      </div>
+      <h2 class="modal-title" id="googlePlayModalTitle">Get Caveman vs Aliens</h2>
+
+      <div data-play-live hidden>
+        <p class="modal-body-text">Scan to download on Android</p>
+        <div class="modal-qr">
+          <img data-play-qr-img src="" alt="" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="17.5" y1="14" x2="17.5" y2="17.5"/><line x1="14" y1="17.5" x2="21" y2="17.5"/></svg>
+          <span>QR code</span>
+        </div>
+        <div class="modal-actions">
+          <a class="btn btn-play" data-play-open-link href="#" target="_blank" rel="noopener noreferrer">
+            <span class="btn-play-text">
+              <span class="btn-play-kicker">Open</span>
+              <span class="btn-play-main">Google Play</span>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <div data-play-coming-soon>
+        <p class="modal-body-text">Caveman vs Aliens is on its way to Google Play. The store link and QR code will appear here as soon as it's live — check back soon!</p>
+        <span class="modal-coming-soon">Coming Soon</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SEE IT IN ACTION MODAL =====================
+       One modal, two views. View 1 offers two cards (Game Intro / Voice
+       Commands). Choosing a card swaps to view 2 (player). The single
+       <video> has NO src/poster until a card is chosen, so no MP4 is
+       requested during page load or when the modal merely opens; closing
+       (or going Back) releases the video again. Opening never autoplays. -->
+  <div class="modal-overlay media-overlay" id="trailerModal" role="dialog" aria-modal="true" aria-labelledby="mediaSelectTitle">
+    <div class="modal-card modal-media" data-media-state="select">
+      <button class="modal-close" type="button" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+
+      <section class="media-select" data-media-select>
+        <h2 class="modal-title media-heading" id="mediaSelectTitle">SEE CAVEMAN VS ALIENS IN ACTION</h2>
+        <p class="media-sub">Choose what you want to watch</p>
+        <div class="media-cards">
+          <button class="media-card" type="button" data-media-card
+                  data-label="GAME INTRO"
+                  data-video="assets/video/caveman-vs-aliens-trailer.mp4"
+                  data-poster="assets/images/trailer/trailer-poster.webp">
+            <span class="media-card-thumb">
+              <img src="assets/images/trailer/trailer-poster.webp" alt="" width="848" height="478" loading="lazy" decoding="async">
+              <span class="media-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19 8 5"/></svg></span>
+            </span>
+            <span class="media-card-title">GAME INTRO</span>
+            <span class="media-card-desc">Meet the caveman. Meet the aliens.</span>
+          </button>
+          <button class="media-card" type="button" data-media-card
+                  data-label="VOICE COMMANDS"
+                  data-video="assets/video/caveman-vs-aliens-voice-commands.mp4"
+                  data-poster="assets/images/trailer/voice-commands-poster.webp">
+            <span class="media-card-thumb">
+              <img src="assets/images/trailer/voice-commands-poster.webp" alt="" width="848" height="478" loading="lazy" decoding="async">
+              <span class="media-card-play" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19 8 5"/></svg></span>
+            </span>
+            <span class="media-card-title">VOICE COMMANDS</span>
+            <span class="media-card-desc">See how BANANA and BOOM work.</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="media-player" data-media-player hidden>
+        <div class="media-player-bar">
+          <button class="media-back" type="button" data-media-back aria-label="Back to video choices">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"/></svg>
+            <span>All videos</span>
+          </button>
+          <h2 class="media-player-title" id="mediaPlayerTitle" data-media-label></h2>
+        </div>
+        <div class="trailer-frame" data-trailer-embed>
+          <video class="trailer-video" controls playsinline preload="none" width="1920" height="1080"></video>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

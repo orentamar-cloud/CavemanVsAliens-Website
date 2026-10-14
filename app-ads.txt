@@ -1,0 +1,9 @@
+# app-ads.txt for Caveman vs Aliens (com.lobala.cornerman)
+# Verified against Google's official "Authorized Sellers for Apps" documentation
+# (developers.google.com/admob/android/app-ads) on 2026-09-27.
+# Publisher ID derived from AdMob App ID ca-app-pub-3018740493231072~5287888218.
+#
+# Re-check this entry against the current live Google documentation before
+# this file goes to production, since Google can change guidance over time.
+
+google.com, pub-3018740493231072, DIRECT, f08c47fec0942fa0

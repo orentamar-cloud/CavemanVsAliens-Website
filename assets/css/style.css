@@ -1,0 +1,1123 @@
+/* ==========================================================================
+   Caveman vs Aliens — Official Website
+   Vanilla CSS, no framework, no external fonts. Mobile-first.
+   ========================================================================== */
+
+:root {
+  /* Core palette — prehistoric night + alien glow */
+  --bg-0: #07080a;
+  --bg-1: #0e1013;
+  --bg-2: #15181d;
+  --bg-card: #12151a;
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  --text-0: #f5f6f8;
+  --text-1: #c7cbd3;
+  --text-2: #8b909c;
+
+  --ember: #ff7a3d;
+  --ember-strong: #ff5a1f;
+  --alien: #63ffb0;
+  --alien-strong: #34e39a;
+  --ufo: #8b7bff;
+
+  --grad-ember: linear-gradient(135deg, var(--ember-strong), var(--ember) 55%, #ffb85e);
+  --grad-alien: linear-gradient(135deg, var(--ufo), var(--alien-strong) 70%);
+
+  /* Phase 2 — brighter "sky" palette, used for the hero + Play/Trailer CTAs.
+     Kept separate from the core dark tokens above so the rest of the site
+     (out of scope for this phase) is untouched. */
+  --sky-top: #2fb2e0;
+  --sky-mid: #6cd6e8;
+  --sky-horizon: #ffd166;
+  --sun-glow: #ffb84d;
+  --ground: #1c6e4f;
+  --play-green: #14b866;
+  --play-green-strong: #0fa058;
+  --trailer-amber: #ff8a1f;
+  --trailer-amber-strong: #ff6a00;
+
+  --grad-sky: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-horizon) 100%);
+  --grad-play: linear-gradient(135deg, var(--play-green-strong), var(--play-green) 65%, #4fd88a);
+  --grad-trailer: linear-gradient(135deg, var(--trailer-amber-strong), var(--trailer-amber) 70%);
+
+  --radius-s: 10px;
+  --radius-m: 16px;
+  --radius-l: 24px;
+
+  --shadow-card: 0 20px 60px -20px rgba(0, 0, 0, 0.65);
+  --shadow-glow-ember: 0 0 60px -10px rgba(255, 90, 31, 0.35);
+  --shadow-glow-alien: 0 0 60px -10px rgba(52, 227, 154, 0.3);
+  --shadow-glow-play: 0 10px 34px -8px rgba(15, 160, 88, 0.55);
+
+  --container: 1180px;
+  --gutter: 20px;
+
+  --font-display: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --z-modal: 300;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg-0);
+  color: var(--text-1);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img { max-width: 100%; display: block; height: auto; }
+a { color: inherit; }
+h1, h2, h3, h4 { color: var(--text-0); margin: 0; font-family: var(--font-display); }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+button { font: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Utility ---------- */
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--gutter); }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: 12px; top: -60px;
+  background: var(--alien-strong); color: #06120c; font-weight: 700;
+  padding: 10px 16px; border-radius: var(--radius-s); z-index: 200;
+  transition: top .2s var(--ease);
+}
+.skip-link:focus { top: 12px; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.78rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--alien-strong);
+}
+.eyebrow::before {
+  content: ""; width: 22px; height: 2px; background: var(--grad-alien); border-radius: 2px;
+}
+
+.section { padding: clamp(56px, 9vw, 120px) 0; position: relative; }
+.section-title {
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  font-weight: 800; letter-spacing: -0.01em; margin-top: 10px;
+}
+.section-lead { margin-top: 14px; color: var(--text-1); font-size: 1.05rem; }
+
+.backdrop-line {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    radial-gradient(600px 300px at 15% 0%, rgba(255,90,31,0.08), transparent 60%),
+    radial-gradient(600px 300px at 85% 100%, rgba(52,227,154,0.08), transparent 60%);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 14px 26px; border-radius: 999px; font-weight: 800;
+  font-size: 0.95rem; letter-spacing: 0.02em; text-decoration: none;
+  border: 1px solid transparent; cursor: pointer;
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
+}
+.btn:active { transform: translateY(1px) scale(0.99); }
+.btn-primary {
+  background: var(--grad-ember); color: #1a0900;
+  box-shadow: var(--shadow-glow-ember);
+}
+.btn-primary:hover { box-shadow: 0 0 80px -8px rgba(255,90,31,0.55); }
+.btn-ghost {
+  background: transparent; color: var(--text-0); border-color: var(--line-strong);
+}
+.btn-ghost:hover { border-color: var(--alien-strong); color: var(--alien-strong); }
+.btn-store {
+  background: var(--bg-card); color: var(--text-1);
+  border: 1px dashed var(--line-strong);
+  cursor: default; user-select: none;
+}
+.btn-store .btn-store-kicker { display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; color: var(--text-2); text-transform: uppercase; }
+.btn-store .btn-store-main { display: block; font-size: 0.98rem; font-weight: 800; color: var(--text-0); margin-top: 2px; }
+
+/* ---------- Google Play CTA (Phase 2) ---------- */
+.btn-play {
+  background: var(--grad-play); color: #04170d;
+  box-shadow: var(--shadow-glow-play);
+  border: none;
+}
+.btn-play:hover { box-shadow: 0 14px 46px -8px rgba(15, 160, 88, 0.7); transform: translateY(-1px); }
+.btn-play svg { width: 22px; height: 22px; flex: none; }
+.btn-play .btn-play-text { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.15; }
+.btn-play .btn-play-kicker { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.85; }
+.btn-play .btn-play-main { font-size: 1rem; font-weight: 900; }
+
+/* ---------- Nav "Watch Trailer" button (Phase 2) ---------- */
+.nav-link-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; border: none; cursor: pointer;
+  text-decoration: none; color: rgba(255, 255, 255, 0.82); font-weight: 700; font-size: 0.92rem;
+  padding: 10px 14px; border-radius: 999px; transition: color .15s, background .15s, border-color .15s;
+  font-family: inherit;
+}
+.nav-link-btn:hover { color: #fff; }
+.nav-link-btn svg { width: 15px; height: 15px; color: var(--trailer-amber); flex: none; }
+.mobile-menu .nav-link-btn {
+  display: flex; align-items: center; gap: 10px; width: 100%; text-align: left;
+  padding: 14px 12px; border-radius: var(--radius-s);
+  color: rgba(255, 255, 255, 0.82); font-weight: 700; font-size: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08); background: transparent; border-left: none; border-right: none; border-top: none;
+}
+.mobile-menu .nav-link-btn svg { width: 16px; height: 16px; color: var(--trailer-amber); }
+
+/* ---------- Header / Nav ----------
+   Correction pass 1: the header is now a true overlay — position: absolute,
+   fully transparent, taken out of normal document flow — so it floats on
+   top of whatever paints behind it (the Hero's sky on index.html, the page
+   banner on inner pages) instead of reserving its own full-width black
+   strip above the content. Sections that sit under it (.hero, .page-hero)
+   add top padding so their content clears the floating nav.
+   Brand/logo chip removed from the header entirely (branding now lives
+   only in the Hero, and in each page's own <h1>) to avoid duplicating it. */
+.site-header {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 100;
+  background: transparent;
+  padding-top: 14px;
+}
+.nav {
+  display: flex; align-items: center; justify-content: flex-end;
+  gap: 14px;
+  padding: 0 var(--gutter) 10px;
+  max-width: var(--container); margin: 0 auto;
+}
+
+.nav-links {
+  display: none;
+  align-items: center; gap: 4px;
+}
+.nav-links a {
+  position: relative;
+  text-decoration: none; color: rgba(255, 255, 255, 0.82); font-weight: 700; font-size: 0.92rem;
+  padding: 10px 16px; border-radius: 999px; transition: color .15s, background .15s;
+}
+.nav-links a:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+.nav-links a[aria-current="page"] {
+  color: #fff;
+}
+.nav-links a[aria-current="page"]::after {
+  content: "";
+  position: absolute; left: 16px; right: 16px; bottom: 6px;
+  height: 2px; border-radius: 2px;
+  background: var(--trailer-amber);
+}
+
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+
+.nav-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 42px; height: 42px; border-radius: 14px;
+  background: rgba(8, 16, 34, 0.78); border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: #fff; cursor: pointer;
+}
+.nav-toggle svg { width: 20px; height: 20px; }
+.nav-toggle .icon-close { display: none; }
+.nav-toggle[aria-expanded="true"] .icon-open { display: none; }
+.nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+
+.mobile-menu {
+  display: none;
+  margin: 8px var(--gutter) 0;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-l);
+  background: linear-gradient(180deg, rgba(9, 19, 40, 0.96), rgba(6, 13, 28, 0.96));
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 20px 50px -14px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+.mobile-menu.is-open { display: block; }
+.mobile-menu ul { padding: 10px 14px 14px; display: flex; flex-direction: column; gap: 2px; }
+.mobile-menu a {
+  display: block; padding: 14px 12px; border-radius: var(--radius-s);
+  text-decoration: none; color: rgba(255, 255, 255, 0.82); font-weight: 700; font-size: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a[aria-current="page"] { color: var(--trailer-amber); }
+
+@media (min-width: 860px) {
+  .nav { justify-content: center; }
+  .nav-links {
+    display: flex;
+    background: linear-gradient(180deg, rgba(10, 22, 46, 0.82), rgba(7, 15, 32, 0.74));
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    padding: 7px;
+    box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  }
+  .nav-links .nav-link-btn {
+    border: 1.5px solid rgba(255, 255, 255, 0.38);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    margin-left: 4px;
+  }
+  .nav-links .nav-link-btn:hover {
+    border-color: var(--trailer-amber);
+    background: rgba(255, 138, 31, 0.16);
+    color: #fff;
+  }
+  .nav-links .nav-link-btn svg { color: var(--trailer-amber); }
+  .nav-toggle { display: none; }
+  .mobile-menu { display: none !important; }
+
+  /* index.html only: hero-final.png already shows this same floating nav
+     pill baked into the artwork at this width, so the real capsule here
+     would duplicate it. Hide the capsule text links; the hero's own
+     invisible, pixel-aligned hotspots (below) provide the real, working
+     Home/Privacy/Watch Trailer controls instead. Untouched on privacy.html
+     and support.html, which have no baked-in nav to duplicate. */
+  body.hero-art-nav .nav-links { display: none; }
+}
+
+/* ---------- Hero ----------
+   hero-final.png is the approved, final artwork and is used exactly as
+   supplied — it is never generated, retouched or cropped destructively.
+   It already bakes in the logo, headline, tagline, nav pill and Google
+   Play button, so no HTML text is drawn on top of it; real, accessible,
+   keyboard-reachable controls are layered over the image instead, aligned
+   to what the artwork shows. The frame's aspect-ratio is swapped per
+   breakpoint to show progressively less of the image's right side
+   (object-position stays left-anchored), keeping the logo/headline/CTA on
+   the left safely in frame at every width without distorting the art. */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--grad-sky);
+  border-bottom: 6px solid var(--ground);
+}
+
+.hero-frame {
+  position: relative;
+  width: 100%;
+  /* Mobile default: show the left ~50% of the image width — enough to
+     keep the baked logo/headline/tagline/Google Play button comfortably
+     in frame with safe margin, verified against their measured extents.
+     (Full height here; the mobile-only vertical crop that removes the
+     baked nav pill is handled by .hero-frame-mobile-bg below, since
+     object-fit: cover can only crop one axis per breakpoint — see its
+     comment.) Tablet/desktop below restore the unclipped aspect ratios
+     they had before this fix; neither one changes. */
+  aspect-ratio: 998.5 / 788;
+}
+.hero-frame-img {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 0% center;
+  display: block;
+}
+
+@media (max-width: 699px) {
+  /* object-fit: cover always matches whichever container dimension is the
+     binding constraint exactly (zero leftover there) and only crops the
+     other — it cannot crop both axes from one <img> at once. At the
+     mobile aspect-ratio above, height is always the binding dimension,
+     so object-position-y here is a no-op and the baked nav pill (which
+     sits in the top ~11.4% of the image) always stays in frame no matter
+     what object-position is set to. A background-image sidesteps that:
+     background-size takes independent width/height percentages, so the
+     image can be deliberately over-scaled on the vertical axis too,
+     creating real leftover for background-position-y to crop into. */
+  .hero-frame-img { display: none; }
+
+  .hero-frame-mobile-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background-image: url("../images/hero-final.png");
+    background-image: image-set(url("../images/hero-final.webp") type("image/webp"), url("../images/hero-final.png") type("image/png"));
+    background-repeat: no-repeat;
+    /* 200% = 100/cw, cw=0.50 (left half of the image's width, same as the
+       desktop/tablet horizontal-crop logic). 138.89% = 100/ch, ch=0.72
+       (show a 72%-tall vertical band of the image, not its full height). */
+    background-size: 200% 138.89%;
+    /* x: 0% = left-anchored, same horizontal crop as before. y: 46.43% =
+       solved so the visible vertical band is [13%, 85%] of the image's
+       height — below the baked nav pill (which ends at ~11.4%) with
+       margin, through the logo/headline/tagline/Google Play button. */
+    background-position: 0% 46.43%;
+  }
+}
+
+/* Real controls, invisible by default (no fill/border/text) so nothing
+   visibly duplicates the artwork's own baked nav pill or Play button —
+   positioned as percentages of the frame so they track the image exactly
+   at any render size, since both scale together. */
+.hero-hotspot {
+  position: absolute;
+  top: var(--spot-t); bottom: var(--spot-b);
+  left: var(--spot-l); right: var(--spot-r);
+  display: block;
+  margin: 0; padding: 0; border: 0; background: transparent;
+  font: inherit; line-height: normal; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.hero-hotspot:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+  border-radius: 10px;
+  box-shadow: 0 0 0 6px rgba(4, 12, 18, 0.45);
+}
+
+.hero-overlay-nav {
+  position: absolute; inset: 0; z-index: 1;
+  /* Hidden below 860px: the artwork's nav pill isn't in frame at the
+     mobile crop, and the real hamburger/mobile menu in the site header
+     already covers navigation there — see .hero-overlay-nav override
+     at 860px below. */
+  display: none;
+}
+.hero-hotspot-play { z-index: 1; }
+
+/* Google Play hotspot: the button stays in frame through every crop, so
+   its hotspot is positioned at all widths. Re-measured directly against
+   hero-final.png's actual button bounds (pixel box [220,518]-[665,650] of
+   the 1997×788 source — the earlier version used a looser box that
+   included margin well outside the visible pill, especially on the left).
+   Mobile fractions (default), mapped through the mobile vertical crop
+   (13%-85% of image height). */
+.hero-hotspot-play {
+  --spot-t: 73.25%; --spot-b: 3.49%;
+  --spot-l: 22.04%; --spot-r: 33.4%;
+}
+
+@media (min-width: 700px) and (max-width: 959px) {
+  /* Tablet: unchanged, approved — show the left 72% of the image width,
+     full height, exactly as before. */
+  .hero-frame { aspect-ratio: 1438.56 / 788; }
+  .hero-frame-img { object-position: 0% center; }
+
+  .hero-hotspot-play {
+    --spot-t: 65.74%; --spot-b: 17.51%;
+    --spot-l: 15.31%; --spot-r: 53.75%;
+  }
+
+  /* Nav hotspot fractions for this crop (only visible from 860px up, via
+     the media query below — harmless to set them here too). */
+  .hero-hotspot-home { --spot-l: 46.9%; --spot-r: 40.3%; }
+  /* Privacy ends where the See It in Action button begins (was overhanging it). */
+  .hero-hotspot-privacy { --spot-l: 59.7%; --spot-r: 30.28%; }
+  /* See It in Action: matches the visible baked button (outline box
+     [1003,26]-[1273,80] of the 1997x788 source; this crop shows the left
+     1438.56px of the image width). Fractions are of the frame. */
+  .hero-hotspot-trailer { --spot-l: 69.72%; --spot-r: 11.51%; }
+  .hero-hotspot-home, .hero-hotspot-privacy, .hero-hotspot-trailer {
+    --spot-t: 2.0%; --spot-b: 88.6%;
+  }
+  .hero-hotspot-trailer { --spot-t: 3.30%; --spot-b: 89.85%; }
+}
+
+@media (min-width: 960px) {
+  /* Desktop: unchanged, approved — the full, uncropped image. Container
+     ratio matches the source image's native ratio exactly, so
+     object-fit: cover never trims anything here regardless of viewport
+     width. */
+  .hero-frame { aspect-ratio: 1997 / 788; }
+  .hero-frame-img { object-position: 0% center; }
+
+  .hero-hotspot-play {
+    --spot-t: 65.74%; --spot-b: 17.51%;
+    --spot-l: 11.02%; --spot-r: 66.7%;
+  }
+
+  .hero-hotspot-home { --spot-l: 33.8%; --spot-r: 57.0%; }
+  /* Privacy ends where the See It in Action button begins (was overhanging it). */
+  .hero-hotspot-privacy { --spot-l: 43.0%; --spot-r: 49.77%; }
+  /* See It in Action: matches the visible baked button (outline box
+     [1003,26]-[1273,80] of the 1997x788 source), full uncropped image. */
+  .hero-hotspot-trailer { --spot-l: 50.23%; --spot-r: 36.25%; }
+  .hero-hotspot-home, .hero-hotspot-privacy, .hero-hotspot-trailer {
+    --spot-t: 2.0%; --spot-b: 88.6%;
+  }
+  .hero-hotspot-trailer { --spot-t: 3.30%; --spot-b: 89.85%; }
+}
+
+@media (min-width: 700px) {
+  /* The artwork's nav pill is in frame from here up (the tablet crop was
+     chosen specifically to keep it clear of the edge), so the real
+     invisible hotspots take over as the page's navigation and the site
+     header's hamburger button (which would otherwise sit uselessly next
+     to a baked pill that looks clickable but isn't wired up) is hidden.
+     Below 700px the pill isn't in frame, so the hamburger/mobile menu
+     stays the real navigation, unchanged. index.html only — privacy.html
+     and support.html have no baked nav and keep the hamburger at every
+     width below their own 860px capsule breakpoint. */
+  .hero-overlay-nav { display: block; }
+  body.hero-art-nav .nav-toggle { display: none; }
+  body.hero-art-nav .mobile-menu { display: none !important; }
+  /* The floating header holds no interactive control here (links and toggle
+     are hidden), but its empty box overlapped the top of the hero hotspots
+     and swallowed clicks. Let them through. */
+  body.hero-art-nav .site-header { pointer-events: none; }
+}
+
+.hero-actions { margin-top: 26px; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+
+/* ---------- Placeholder media ---------- */
+.placeholder-frame {
+  position: relative;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+.placeholder-frame img { width: 100%; height: 100%; object-fit: cover; }
+.placeholder-tag {
+  position: absolute; top: 12px; left: 12px;
+  background: rgba(7,8,10,0.72); border: 1px solid var(--line-strong);
+  color: var(--text-1); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 6px 10px; border-radius: 999px;
+  backdrop-filter: blur(6px);
+}
+
+/* ---------- Game Features band (Phase C) ----------
+   One continuous illustrated band directly under the Hero: a shared dark
+   rock/night-sky background with a warm ground-glow seam at the bottom
+   (echoing the Hero's own ground glow, so there's no hard black gap
+   between sections), three panels with their own themed light color
+   (cyan=Voice, lava/green=Dinosaurs, violet/blue=Power-Ups), and a thin
+   stone-seam divider between panels instead of a hard edge. */
+.features {
+  position: relative;
+  background: linear-gradient(180deg, #060d1c 0%, #0a1730 55%, #0d1c3a 100%);
+  border-bottom: 6px solid var(--ground);
+}
+.features-band {
+  position: relative;
+  display: flex;
+  min-height: clamp(360px, 34vw, 460px);
+}
+.feature-panel {
+  position: relative;
+  flex: 1 1 0;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  overflow: hidden;
+  padding: 26px 24px 30px;
+  text-align: left;
+  border: 0; cursor: default;
+  font: inherit; color: inherit;
+  background:
+    radial-gradient(130% 90% at 0% 100%, rgba(255, 170, 60, 0.16), transparent 55%),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.35) 0%, transparent 38%);
+}
+.feature-panel + .feature-panel {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 6px 0 14px -10px rgba(0, 0, 0, 0.6);
+}
+.feature-panel-voice {
+  flex-grow: 1.35;
+  padding: 0;
+  /* Cream sampled from the approved artwork's own edges, so any sub-pixel
+     rounding at the panel edge is invisible. */
+  background: #f0d6b4;
+}
+.feature-panel-dino { flex-grow: 1.05; padding: 0; background-color: #1b3a1a; }
+.feature-panel-power { flex-grow: 1.1; padding: 0; background-color: #0a1d4a; }
+
+
+.feature-art {
+  position: absolute; inset: 0; z-index: 0;
+  display: block;
+  pointer-events: none;
+}
+.feature-art img {
+  position: absolute;
+  width: auto; height: 86%;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.45));
+}
+/* Voice Commands: the approved PNG is the whole panel face. Used as supplied
+   (never edited/cropped on disk), decorative, shown once. */
+.feature-art-voice img {
+  inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 50%;
+  filter: none;
+}
+/* Mobile-only crops are drawn by these two pseudo-tiles (same PNG, CSS
+   background-position); hidden whenever the single <img> is shown. */
+.feature-art-voice::before,
+.feature-art-voice::after { content: none; }
+.feature-art-dino img {
+  inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 100% 50%;
+  filter: none;
+}
+.feature-art-power img {
+  inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 40% 50%;
+  filter: none;
+}
+
+/* ---------- Desktop: one cohesive band, Voice dominant ----------
+   Voice's row height comes from the artwork's own aspect ratio, so the
+   image shows in full, undistorted. Dinosaurs / Power-Ups share the rest. */
+@media (min-width: 1180px) {
+  .features-band { display: grid; grid-template-columns: 2.75fr 1.8fr 1.8fr; min-height: 0; }
+  .feature-panel { flex-grow: 0; min-height: 0; }
+  .feature-panel-voice { aspect-ratio: 2080 / 756; min-height: 0; }
+}
+
+/* ---------- Tablet: 2+1, Voice gets its own full-width row ---------- */
+@media (min-width: 700px) and (max-width: 1179px) {
+  .features-band { display: grid; grid-template-columns: 1fr 1fr; min-height: 0; }
+  .feature-panel { flex-grow: 0; min-height: 230px; }
+  .feature-panel-voice {
+    grid-column: 1 / -1;
+    aspect-ratio: 2080 / 756; min-height: 0;
+  }
+  .feature-panel + .feature-panel { border-left: 0; box-shadow: none; }
+  .feature-panel-dino { border-top: 1px solid rgba(255, 255, 255, 0.08); }
+  .feature-panel-power {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* ---------- Mobile: one panel at a time, full width ---------- */
+@media (max-width: 699px) {
+  .features-band { display: flex; flex-direction: column; min-height: 0; }
+  .feature-panel {
+    flex-grow: 0; min-height: 300px; padding: 22px 20px 24px;
+  }
+  .feature-panel + .feature-panel {
+    border-left: 0; box-shadow: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Voice on phones: the 2.75:1 artwork would shrink its baked-in text to
+     nothing at ~360px, so under 700px a <picture> source serves a portrait
+     recomposition of the SAME approved artwork (caveman above, title +
+     BANANA/BOOM below, blended on plain cream — see
+     voice-commands-mobile.png). One continuous image, no divider. */
+  .feature-panel-voice { flex: 0 0 auto; min-height: 0; padding: 0; display: block; }
+  .feature-art-voice { position: static; display: block; }
+  .feature-art-voice img {
+    position: static; display: block; width: 100%; height: auto;
+    aspect-ratio: 1223 / 1466; object-fit: cover;
+  }
+
+  /* Dinosaurs on phones: one clean CSS crop of dinosaurs-final.png, anchored
+     to the right so the whole title + sentence stay in frame (the far-left
+     tail/claws are the only thing trimmed). */
+  .feature-panel-dino { flex: 0 0 auto; min-height: 0; padding: 0; display: block; }
+  .feature-art-dino { position: static; display: block; }
+  .feature-art-dino img {
+    position: static; display: block; width: 100%; height: auto;
+    aspect-ratio: 1.85 / 1; object-fit: cover; object-position: 100% 50%;
+  }
+
+  /* Power-Ups on phones: one clean CSS crop of powerups-final.png (only a
+     few % trimmed from the sides) so title, UFO + alien, tornado, gift and
+     shoe all stay in one continuous panel. */
+  .feature-panel-power { flex: 0 0 auto; min-height: 0; padding: 0; display: block; }
+  .feature-art-power { position: static; display: block; }
+  .feature-art-power img {
+    position: static; display: block; width: 100%; height: auto;
+    aspect-ratio: 1.85 / 1; object-fit: cover; object-position: 40% 50%;
+  }
+}
+
+/* ---------- Gameplay carousel (Phase D.2) ----------
+   One carousel. The track is native horizontal scrolling with scroll-snap,
+   so swipe / trackpad / wheel work with no JavaScript. Slide width is driven
+   by --gp-n ("how many slides are visible", fractional on purpose so the
+   next one peeks in) and --gp-gap. Page never overflows: only the track
+   scrolls. */
+.gameplay {
+  --gp-n: 1.12; --gp-gap: 14px;
+  padding: clamp(36px, 4.6vw, 60px) 0 clamp(28px, 3.4vw, 48px);
+  background:
+    radial-gradient(60% 70% at 12% 0%, rgba(255, 150, 60, 0.16), transparent 70%),
+    radial-gradient(55% 70% at 90% 10%, rgba(56, 200, 255, 0.16), transparent 70%),
+    linear-gradient(180deg, #0d1c3a 0%, #0a1226 55%, var(--bg-0) 100%);
+}
+.gp-container { max-width: 1400px; }
+@media (min-width: 700px)  { .gameplay { --gp-n: 2.4; --gp-gap: 16px; } }
+@media (min-width: 1100px) { .gameplay { --gp-n: 4;   --gp-gap: 18px; } }
+
+.gp-title {
+  margin: 0 0 clamp(18px, 2.4vw, 28px); text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: clamp(4px, 0.6vw, 8px);
+  font-family: var(--font-display); line-height: 1.05;
+}
+/* GAMEPLAY = primary heading (still far below the hero logo in weight) */
+.gp-name {
+  font-size: clamp(1.75rem, 3.1vw, 2.5rem); font-weight: 900; letter-spacing: 0.1em;
+  padding-left: 0.1em; text-transform: uppercase;
+  background: linear-gradient(180deg, #fff3c4 0%, #ffb020 55%, #ff6a28 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.5));
+}
+/* tagline = secondary, quieter, stays on one line down to 360px */
+.gp-tagline {
+  font-size: clamp(0.72rem, 1.1vw, 0.92rem); font-weight: 800; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(255, 255, 255, 0.78);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+@media (max-width: 420px) { .gp-tagline { letter-spacing: 0.09em; } }
+
+.gp { position: relative; }
+/* "Fun for all ages": one quiet bridge line under the carousel (F.2) */
+.gp-bridge {
+  margin: clamp(4px, 0.8vw, 10px) 0 0; text-align: center;
+  font-family: var(--font-display); font-weight: 800; line-height: 1.2;
+  font-size: clamp(0.8rem, 1.15vw, 0.98rem); letter-spacing: 0.2em; padding-left: 0.2em;
+  text-transform: uppercase; color: #ffc15a;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+@media (max-width: 420px) { .gp-bridge { letter-spacing: 0.14em; padding-left: 0.14em; } }
+.gp-track {
+  list-style: none; margin: 0; padding: 8px 0 18px;
+  position: relative;                      /* offsetParent for slide math in JS */
+  display: flex; gap: var(--gp-gap);
+  overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.gp-track::-webkit-scrollbar { display: none; }
+html:not(.js) .gp-track { scrollbar-width: thin; }   /* no-JS: keep a visible scroll cue */
+.gp-slide {
+  flex: 0 0 calc((100% - (var(--gp-n) - 1) * var(--gp-gap)) / var(--gp-n));
+  min-width: 0; scroll-snap-align: start;
+}
+.gp-card {
+  margin: 0; position: relative; aspect-ratio: 16 / 9; overflow: hidden;
+  border-radius: 18px; background: #0a1226;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 16px 34px -16px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  transition: transform .25s var(--ease), border-color .25s var(--ease);
+}
+.gp-card img { width: 100%; height: 100%; object-fit: cover; }
+@media (hover: hover) {
+  .gp-card:hover { transform: translateY(-3px); border-color: rgba(255, 209, 102, 0.75); }
+}
+
+/* Prev / Next — real buttons, only shown when JS is running */
+.gp-btn {
+  display: none; position: absolute; top: calc(50% - 10px); z-index: 2;
+  width: 48px; height: 48px; margin-top: -24px; padding: 0;
+  place-items: center; border-radius: 50%; cursor: pointer;
+  color: #fff; border: 2px solid rgba(255, 255, 255, 0.85);
+  background: linear-gradient(180deg, #ffb020, #ff6a28);
+  box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.7);
+  transition: transform .18s var(--ease), opacity .18s var(--ease), filter .18s var(--ease);
+}
+.js .gp-btn { display: grid; }
+.gp-btn svg { width: 24px; height: 24px; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.35)); }
+.gp-prev { left: 8px; }
+.gp-next { right: 8px; }
+.gp-btn:hover:not(:disabled) { transform: scale(1.08); filter: brightness(1.08); }
+.gp-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.gp-btn:disabled { opacity: 0.35; cursor: default; }
+.gp-btn[hidden] { display: none !important; }
+@media (max-width: 699px) {
+  .gp-btn { width: 40px; height: 40px; margin-top: -20px; }
+  .gp-btn svg { width: 20px; height: 20px; }
+  .gp-prev { left: 6px; } .gp-next { right: 6px; }
+}
+@media (min-width: 1100px) {
+  /* straddle the track edge so the arrows read as navigation, not overlays */
+  .gp-prev { left: -14px; }
+  .gp-next { right: -14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gp-card, .gp-btn { transition: none; }
+}
+
+/* ---------- CTA band ---------- */
+.cta-band {
+  /* tighter than the default .section padding (E.4) */
+  padding: clamp(44px, 6vw, 80px) 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  /* very subtle warm / cool tints echo the Gameplay band; dark base unchanged */
+  background:
+    radial-gradient(60% 80% at 12% 0%, rgba(255, 150, 60, 0.07), transparent 70%),
+    radial-gradient(55% 80% at 90% 0%, rgba(56, 200, 255, 0.07), transparent 70%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-0));
+  text-align: center;
+}
+.cta-band .section-title { font-size: clamp(1.6rem, 3.6vw, 2.3rem); }
+.cta-band .section-lead { margin-left: auto; margin-right: auto; text-wrap: balance; }
+.cta-band .hero-actions { justify-content: center; margin-top: 30px; }
+/* larger Google Play button, this section only (same markup + behavior) */
+.cta-band .btn-play { padding: 16px 36px; gap: 12px; }
+.cta-band .btn-play svg { width: 28px; height: 28px; }
+.cta-band .btn-play .btn-play-kicker { font-size: 0.86rem; }
+.cta-band .btn-play .btn-play-main { font-size: 1.4rem; }
+@media (max-width: 699px) {
+  .cta-band .btn-play { padding: 15px 30px; gap: 11px; }
+  .cta-band .btn-play svg { width: 26px; height: 26px; }
+  .cta-band .btn-play .btn-play-kicker { font-size: 0.76rem; }
+  .cta-band .btn-play .btn-play-main { font-size: 1.25rem; }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 40px 0 28px;
+  background: var(--bg-0);
+}
+.footer-grid {
+  display: flex; flex-direction: column; gap: 24px;
+}
+@media (min-width: 700px) {
+  .footer-grid { flex-direction: row; align-items: center; justify-content: space-between; }
+}
+.footer-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; color: var(--text-0); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 22px; }
+.footer-links a { text-decoration: none; color: var(--text-2); font-weight: 700; font-size: 0.9rem; }
+.footer-links a:hover { color: var(--alien-strong); }
+.footer-meta { color: var(--text-2); font-size: 0.82rem; }
+
+/* Homepage footer polish (F.3): scoped to body.hero-art-nav so privacy.html /
+   support.html footers are untouched. Small dark badge for the "CA" mark. */
+body.hero-art-nav .brand-mark {
+  flex: none; display: inline-grid; place-items: center;
+  width: 42px; height: 42px; border-radius: 12px;
+  font-family: var(--font-display); font-weight: 900; font-size: 1rem;
+  letter-spacing: 0.04em; line-height: 1; color: #ffe2a8;
+  background:
+    radial-gradient(90% 90% at 0% 0%, rgba(255, 150, 60, 0.28), transparent 70%),
+    radial-gradient(90% 90% at 100% 100%, rgba(56, 200, 255, 0.24), transparent 70%),
+    #121722;
+  border: 1px solid rgba(255, 193, 90, 0.38);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+body.hero-art-nav .footer-brand { gap: 12px; }
+@media (max-width: 699px) {
+  body.hero-art-nav .brand-mark { width: 38px; height: 38px; border-radius: 11px; font-size: 0.92rem; }
+  body.hero-art-nav .footer-grid { align-items: center; text-align: center; gap: 16px; }
+  body.hero-art-nav .footer-brand,
+  body.hero-art-nav .footer-links { justify-content: center; }
+}
+
+/* ---------- Reveal-on-scroll (subtle) ----------
+   Progressive enhancement: content is fully visible by default so it never
+   depends on JavaScript running. The ".js" class is added by a tiny inline
+   script in <head> only when JS is available, and that's the only scope
+   where the hidden starting state applies. */
+.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.js .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+/* ==========================================================================
+   Inner pages (Privacy / Support)
+   ========================================================================== */
+.page-hero {
+  /* Extra top padding because .site-header now floats over this banner
+     (position: absolute) instead of pushing it down in normal flow. */
+  padding: 128px 0 30px; border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(700px 360px at 15% -20%, rgba(255,90,31,0.12), transparent 60%),
+    radial-gradient(700px 360px at 100% 0%, rgba(52,227,154,0.08), transparent 60%);
+}
+.page-title { font-size: clamp(1.9rem, 4.4vw, 2.6rem); font-weight: 900; letter-spacing: -0.01em; }
+.page-meta { margin-top: 12px; color: var(--text-2); font-size: 0.92rem; }
+
+.legal {
+  padding: 44px 0 100px;
+}
+.legal-layout {
+  display: grid; gap: 40px;
+}
+@media (min-width: 940px) {
+  .legal-layout { grid-template-columns: 240px 1fr; align-items: start; }
+}
+.legal-toc {
+  position: sticky; top: 92px;
+  border: 1px solid var(--line); border-radius: var(--radius-m);
+  background: var(--bg-card); padding: 18px;
+}
+/* Below the two-column breakpoint the TOC sits in normal flow so it cannot overlap the text that follows. */
+@media (max-width: 939px) {
+  .legal-toc { position: static; }
+}
+.legal-toc h2 { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-2); margin-bottom: 10px; }
+.legal-toc ul { display: flex; flex-direction: column; gap: 2px; }
+.legal-toc a {
+  display: block; padding: 8px 10px; border-radius: 8px;
+  font-size: 0.88rem; color: var(--text-1); text-decoration: none; font-weight: 600;
+}
+.legal-toc a:hover { background: var(--bg-1); color: var(--text-0); }
+
+.legal-body h2 {
+  font-size: 1.28rem; margin-top: 44px; margin-bottom: 12px; scroll-margin-top: 100px;
+}
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p { color: var(--text-1); margin-top: 10px; }
+.legal-body ul { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.legal-body li { color: var(--text-1); padding-left: 20px; position: relative; }
+.legal-body li::before {
+  content: ""; position: absolute; left: 0; top: 0.65em; width: 7px; height: 7px;
+  border-radius: 50%; background: var(--alien-strong);
+}
+.legal-body a.link { color: var(--alien-strong); text-decoration: underline; text-underline-offset: 3px; }
+
+.notice-callout {
+  margin-top: 14px; padding: 14px 16px; border-radius: var(--radius-s);
+  background: rgba(255, 90, 31, 0.08); border: 1px solid rgba(255, 90, 31, 0.35);
+  color: #ffd8bf; font-size: 0.92rem;
+}
+
+.placeholder-pending {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255, 214, 10, 0.12); border: 1.5px dashed #ffd60a;
+  color: #ffe066; font-weight: 800; letter-spacing: 0.03em;
+  padding: 8px 14px; border-radius: 999px; font-size: 0.86rem;
+  margin: 6px 0;
+}
+.placeholder-pending svg { width: 15px; height: 15px; flex: none; }
+
+/* ---------- Support page ---------- */
+.support-grid {
+  display: grid; gap: 18px; margin-top: 36px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+.support-card {
+  background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius-m);
+  padding: 24px; display: flex; flex-direction: column; gap: 10px;
+}
+.support-card h3 { font-size: 1.05rem; }
+.support-card p { color: var(--text-2); font-size: 0.9rem; flex: 1; }
+.support-card .btn { align-self: flex-start; margin-top: 4px; }
+
+.contact-panel {
+  margin-top: 46px; padding: 28px; border-radius: var(--radius-l);
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(160deg, rgba(255,90,31,0.08), rgba(52,227,154,0.06));
+  text-align: center;
+}
+.contact-panel h2 { font-size: 1.3rem; }
+.contact-panel p { margin-top: 8px; color: var(--text-1); }
+.contact-panel .btn { margin-top: 20px; }
+
+/* ==========================================================================
+   Modal system (Phase 2) — used by the Google Play modal and the
+   Watch Trailer modal. Vanilla JS only, no libraries.
+   ========================================================================== */
+body.no-scroll { overflow: hidden; }
+
+.modal-overlay {
+  position: fixed; inset: 0; z-index: var(--z-modal);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+  background: rgba(5, 8, 10, 0.72);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.modal-overlay.is-open { display: flex; }
+
+.modal-card {
+  position: relative;
+  width: 100%; max-width: 420px;
+  background: var(--bg-1);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-card);
+  padding: 36px 28px 28px;
+  text-align: center;
+}
+.modal-close {
+  position: absolute; top: 14px; right: 14px;
+  width: 38px; height: 38px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--bg-card); border: 1px solid var(--line);
+  color: var(--text-1); cursor: pointer;
+}
+.modal-close svg { width: 16px; height: 16px; }
+.modal-close:hover { color: var(--text-0); border-color: var(--line-strong); }
+
+.modal-icon {
+  width: 56px; height: 56px; margin: 0 auto 16px;
+  border-radius: var(--radius-m);
+  display: grid; place-items: center;
+  background: var(--grad-play); color: #04170d;
+}
+.modal-icon svg { width: 28px; height: 28px; }
+.modal-card.modal-trailer .modal-icon { background: var(--grad-trailer); color: #2a0f00; }
+
+.modal-title { font-size: 1.3rem; font-weight: 900; color: var(--text-0); }
+.modal-body-text { margin-top: 10px; color: var(--text-1); font-size: 0.96rem; }
+
+.modal-qr {
+  margin: 22px auto 6px;
+  width: 168px; height: 168px;
+  border-radius: var(--radius-m);
+  background: var(--bg-card);
+  border: 1.5px dashed var(--line-strong);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 6px;
+  color: var(--text-2); font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.04em; text-align: center; padding: 10px;
+}
+.modal-qr img { width: 100%; height: 100%; object-fit: contain; border-radius: var(--radius-s); }
+.modal-qr svg { width: 30px; height: 30px; opacity: 0.6; }
+
+.modal-coming-soon {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 18px; padding: 10px 18px; border-radius: 999px;
+  background: rgba(255, 214, 10, 0.12); border: 1.5px dashed #ffd60a;
+  color: #ffe066; font-weight: 800; letter-spacing: 0.04em; font-size: 0.82rem;
+}
+
+.modal-actions { margin-top: 22px; display: flex; justify-content: center; }
+
+/* Watch Trailer modal (G.1): wide card sized so the 16:9 video always fits
+   the viewport height; never cropped or stretched. */
+.modal-card.modal-trailer {
+  max-width: min(960px, calc((100vh - 130px) * 16 / 9));
+  max-width: min(960px, calc((100dvh - 130px) * 16 / 9));
+  padding: 18px 18px 18px;
+}
+.modal-card.modal-trailer .modal-title {
+  font-size: 1.05rem; text-align: left; padding: 0 52px 12px 4px; line-height: 38px; padding-top: 0; padding-bottom: 10px;
+}
+.modal-card.modal-trailer .modal-close { top: 14px; right: 14px; }
+.trailer-frame {
+  width: 100%; aspect-ratio: 16 / 9; background: #000;
+  border-radius: var(--radius-s); overflow: hidden;
+}
+.trailer-video { display: block; width: 100%; height: 100%; object-fit: contain; background: #000; }
+@media (max-width: 699px) {
+  .modal-overlay { padding: 12px; }
+  .modal-card.modal-trailer { padding: 12px; max-width: min(960px, calc((100dvh - 110px) * 16 / 9)); }
+}
+
+/* Focus visibility across the site (buttons, links, modal controls) */
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--alien-strong);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+.btn:focus-visible { outline-offset: 4px; }
+
+/* ==========================================================================
+   See It in Action — two-card media modal. Reuses the modal system, the
+   .trailer-frame / .trailer-video player box and the existing tokens.
+   ========================================================================== */
+.media-select[hidden], .media-player[hidden] { display: none; }
+
+/* Tall content or short viewports scroll inside the overlay instead of
+   clipping; margin:auto keeps the card centred when there is room. */
+.modal-overlay.media-overlay { overflow-y: auto; align-items: flex-start; }
+.media-overlay .modal-media { margin: auto; }
+
+.modal-card.modal-media {
+  max-width: 880px;
+  padding: 34px 28px 28px;
+}
+.modal-card.modal-media[data-media-state="player"] {
+  max-width: min(960px, 100%);
+  max-width: min(960px, max(300px, calc((100dvh - 150px) * 16 / 9)));
+  padding: 14px 16px 16px;
+}
+
+.media-heading {
+  font-size: clamp(1.15rem, 2.6vw, 1.55rem);
+  letter-spacing: 0.02em; line-height: 1.2;
+  padding: 0 40px; text-wrap: balance;
+}
+.media-sub { margin-top: 8px; color: var(--text-1); font-size: 0.98rem; }
+
+.media-cards {
+  margin-top: 24px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+}
+.media-card {
+  display: flex; flex-direction: column; text-align: left;
+  padding: 0; overflow: hidden; cursor: pointer;
+  background: var(--bg-card); color: var(--text-0);
+  border: 1.5px solid var(--line-strong); border-radius: var(--radius-m);
+  transition: transform .18s var(--ease), border-color .18s, box-shadow .18s;
+}
+.media-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--trailer-amber);
+  box-shadow: 0 14px 32px -16px rgba(0, 0, 0, 0.7);
+}
+.media-card:focus-visible { outline-offset: 3px; border-radius: var(--radius-m); }
+.media-card-thumb {
+  position: relative; display: block; width: 100%; aspect-ratio: 16 / 9;
+  background: #000; overflow: hidden;
+}
+.media-card-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.media-card-play {
+  position: absolute; left: 12px; bottom: 12px;
+  width: 46px; height: 46px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--grad-trailer); color: #2a0f00;
+  box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.6);
+}
+.media-card-play svg { width: 20px; height: 20px; margin-left: 2px; }
+.media-card-title {
+  display: block; padding: 14px 16px 0;
+  font-size: 1.1rem; font-weight: 900; letter-spacing: 0.04em; color: var(--text-0);
+}
+.media-card-desc { display: block; padding: 4px 16px 16px; color: var(--text-1); font-size: 0.93rem; }
+
+/* Player view */
+.media-player-bar {
+  display: flex; align-items: center; gap: 12px;
+  min-height: 40px; padding-right: 52px; margin-bottom: 10px;
+}
+.media-back {
+  display: inline-flex; align-items: center; gap: 4px; flex: none;
+  min-height: 40px; padding: 0 14px 0 8px; border-radius: 999px; cursor: pointer;
+  background: var(--bg-card); color: var(--text-0);
+  border: 1px solid var(--line-strong); font-weight: 800; font-size: 0.9rem;
+}
+.media-back:hover { border-color: var(--trailer-amber); }
+.media-back svg { width: 18px; height: 18px; }
+.media-player-title {
+  font-size: 1rem; font-weight: 900; letter-spacing: 0.04em; color: var(--text-0);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+@media (max-width: 699px) {
+  .modal-card.modal-media { padding: 28px 16px 18px; }
+  .modal-card.modal-media[data-media-state="player"] { padding: 12px; }
+  .media-heading { padding: 0 34px; }
+  .media-cards { grid-template-columns: 1fr; gap: 14px; margin-top: 18px; }
+  .media-card-title { padding-top: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .media-card:hover { transform: none; }
+}
+
+/* Short phones (e.g. 360x640): keep both choices on screen at once by
+   switching each card to a compact thumbnail-left layout. */
+@media (max-width: 699px) and (max-height: 760px) {
+  .media-card {
+    display: grid; grid-template-columns: 47% 1fr; grid-template-rows: 1fr 1fr;
+    align-items: stretch;
+  }
+  .media-card-thumb { grid-row: 1 / 3; height: auto; align-self: center; }
+  .media-card-play { left: 8px; bottom: 8px; width: 34px; height: 34px; }
+  .media-card-play svg { width: 15px; height: 15px; }
+  .media-card-title { align-self: end; padding: 10px 10px 0 12px; font-size: 0.9rem; letter-spacing: 0.03em; }
+  .media-card-desc { align-self: start; padding: 2px 10px 10px 12px; font-size: 0.82rem; }
+  .media-cards { gap: 10px; margin-top: 14px; grid-auto-rows: 1fr; }
+  .media-sub { margin-top: 6px; }
+}
+@media (max-width: 420px) {
+  .media-player-title { white-space: normal; font-size: 0.86rem; line-height: 1.15; letter-spacing: 0.02em; }
+  .media-back { padding: 0 12px 0 6px; }
+}
