@@ -299,6 +299,7 @@ button { font: inherit; }
    (object-position stays left-anchored), keeping the logo/headline/CTA on
    the left safely in frame at every width without distorting the art. */
 .hero {
+  --hero-mobile-ratio: 1080 / 1350;   /* = hero-mobile.* pixel size (4:5) */
   position: relative;
   overflow: hidden;
   background: var(--grad-sky);
@@ -308,15 +309,11 @@ button { font: inherit; }
 .hero-frame {
   position: relative;
   width: 100%;
-  /* Mobile default: show the left ~50% of the image width — enough to
-     keep the baked logo/headline/tagline/Google Play button comfortably
-     in frame with safe margin, verified against their measured extents.
-     (Full height here; the mobile-only vertical crop that removes the
-     baked nav pill is handled by .hero-frame-mobile-bg below, since
-     object-fit: cover can only crop one axis per breakpoint — see its
-     comment.) Tablet/desktop below restore the unclipped aspect ratios
-     they had before this fix; neither one changes. */
-  aspect-ratio: 998.5 / 788;
+  /* Mobile default (<=768px): ratio of the dedicated mobile hero art
+     (assets/images/hero-mobile.*, recommended 1080x1350 for the final
+     design). Keep this equal to that file's pixel ratio. Tablet/desktop
+     override it below. */
+  aspect-ratio: var(--hero-mobile-ratio);
 }
 .hero-frame-img {
   position: absolute; inset: 0; z-index: 0;
@@ -325,34 +322,15 @@ button { font: inherit; }
   display: block;
 }
 
-@media (max-width: 699px) {
-  /* object-fit: cover always matches whichever container dimension is the
-     binding constraint exactly (zero leftover there) and only crops the
-     other — it cannot crop both axes from one <img> at once. At the
-     mobile aspect-ratio above, height is always the binding dimension,
-     so object-position-y here is a no-op and the baked nav pill (which
-     sits in the top ~11.4% of the image) always stays in frame no matter
-     what object-position is set to. A background-image sidesteps that:
-     background-size takes independent width/height percentages, so the
-     image can be deliberately over-scaled on the vertical axis too,
-     creating real leftover for background-position-y to crop into. */
-  .hero-frame-img { display: none; }
-
-  .hero-frame-mobile-bg {
-    position: absolute; inset: 0; z-index: 0;
-    background-image: url("../images/hero-final.png");
-    background-image: image-set(url("../images/hero-final.webp") type("image/webp"), url("../images/hero-final.png") type("image/png"));
-    background-repeat: no-repeat;
-    /* 200% = 100/cw, cw=0.50 (left half of the image's width, same as the
-       desktop/tablet horizontal-crop logic). 138.89% = 100/ch, ch=0.72
-       (show a 72%-tall vertical band of the image, not its full height). */
-    background-size: 200% 138.89%;
-    /* x: 0% = left-anchored, same horizontal crop as before. y: 46.43% =
-       solved so the visible vertical band is [13%, 85%] of the image's
-       height — below the baked nav pill (which ends at ~11.4%) with
-       margin, through the logo/headline/tagline/Google Play button. */
-    background-position: 0% 46.43%;
-  }
+@media (max-width: 768px) {
+  /* Dedicated mobile hero: <picture> in index.html swaps in
+     assets/images/hero-mobile.* at this width, so no crop tricks are
+     needed here — the image simply fills the frame (frame ratio ==
+     image ratio). SAFE ZONE: the floating hamburger sits over the top-right
+     corner of the hero (~60px from the top, ~62px from the right edge in
+     CSS px); the mobile art should keep that corner free of the logo,
+     faces and text. */
+  .hero-frame-img { object-position: 50% 50%; }
 }
 
 /* Real controls, invisible by default (no fill/border/text) so nothing
@@ -393,11 +371,13 @@ button { font: inherit; }
    Mobile fractions (default), mapped through the mobile vertical crop
    (13%-85% of image height). */
 .hero-hotspot-play {
-  --spot-t: 73.25%; --spot-b: 3.49%;
-  --spot-l: 22.04%; --spot-r: 33.4%;
+  /* Mobile (<=768px), measured on the final hero-mobile.* (1080x1350):
+     visible button box [82,508]-[555,641]. */
+  --spot-t: 37.63%; --spot-b: 52.52%;
+  --spot-l: 7.59%; --spot-r: 48.61%;
 }
 
-@media (min-width: 700px) and (max-width: 959px) {
+@media (min-width: 769px) and (max-width: 959px) {
   /* Tablet: unchanged, approved — show the left 72% of the image width,
      full height, exactly as before. */
   .hero-frame { aspect-ratio: 1438.56 / 788; }
@@ -448,13 +428,13 @@ button { font: inherit; }
   .hero-hotspot-trailer { --spot-t: 3.30%; --spot-b: 89.85%; }
 }
 
-@media (min-width: 700px) {
+@media (min-width: 769px) {
   /* The artwork's nav pill is in frame from here up (the tablet crop was
      chosen specifically to keep it clear of the edge), so the real
      invisible hotspots take over as the page's navigation and the site
      header's hamburger button (which would otherwise sit uselessly next
      to a baked pill that looks clickable but isn't wired up) is hidden.
-     Below 700px the pill isn't in frame, so the hamburger/mobile menu
+     Up to 768px the dedicated mobile hero is used (no baked pill), so the hamburger/mobile menu
      stays the real navigation, unchanged. index.html only — privacy.html
      and support.html have no baked nav and keep the hamburger at every
      width below their own 860px capsule breakpoint. */
