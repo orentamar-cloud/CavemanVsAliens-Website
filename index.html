@@ -84,6 +84,12 @@
     <section class="hero">
       <div class="hero-frame">
         <picture>
+          <!-- Dedicated mobile hero (<=768px). Desktop/tablet keep using
+               hero-final.* below, unchanged. The mobile art is its own
+               composition (see assets/images/hero-mobile.*); if its pixel
+               ratio ever changes, update --hero-mobile-ratio in style.css. -->
+          <source media="(max-width: 768px)" srcset="assets/images/hero-mobile.webp" type="image/webp">
+          <source media="(max-width: 768px)" srcset="assets/images/hero-mobile.png" type="image/png">
           <source srcset="assets/images/hero-final.webp" type="image/webp">
           <img
             class="hero-frame-img"
@@ -93,14 +99,6 @@
             loading="eager"
           >
         </picture>
-        <!-- Mobile-only (<700px): object-fit: cover can only crop ONE axis
-             per breakpoint (whichever isn't the binding constraint), which
-             is why the <img> above can't also crop the baked nav pill out
-             vertically on top of its horizontal crop. A background-image
-             with explicit two-axis background-size does both at once. The
-             <img> above is hidden at this width instead (see style.css),
-             so there's no visible duplication. -->
-        <div class="hero-frame-mobile-bg" aria-hidden="true"></div>
 
         <h1 class="visually-hidden">
           Caveman vs Aliens — The aliens woke the wrong caveman. Silly aliens
