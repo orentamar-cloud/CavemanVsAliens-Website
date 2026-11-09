@@ -13,21 +13,13 @@
   /* ==========================================================================
      SINGLE SOURCE OF TRUTH — Google Play Store URL
      ==========================================================================
-     This is intentionally EMPTY right now. No official Google Play listing
-     URL exists yet for Caveman vs Aliens, and we do not invent one (not the
-     Play Console "Internal Testing" link, not a guessed package URL).
-
-     When the real, public Google Play Store URL is ready, paste it here as
-     a plain string, e.g.:
-       var GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.lobala.cornerman";
-
-     That single change is all that's needed — it automatically feeds:
+     The public Google Play listing. It feeds:
        1. The mobile "direct to store" navigation behavior below, and
-       2. The desktop modal's QR code + "Open Google Play" button.
-     Until it's set, every entry point shows a safe "Coming Soon" state
-     instead of a broken or fake link.
+       2. The desktop modal's "Open Google Play" button.
+     The modal's QR image (assets/images/google-play-qr.png) is a static file
+     that encodes this same URL — regenerate it if this URL ever changes.
      ========================================================================== */
-  var GOOGLE_PLAY_URL = "";
+  var GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.lobala.cornerman";
 
   function isMobileDevice() {
     // Standard UA check used for store-redirect buttons. Paired with a
@@ -122,15 +114,13 @@
   var activeModal = null;
   var lastFocusedEl = null;
 
-  // The Google Play modal keeps both its "live" state (hidden while
-  // GOOGLE_PLAY_URL is empty) and its "coming soon" state in the DOM at
-  // once, toggling which is visible with the `hidden` attribute.
   // querySelectorAll(FOCUSABLE_SELECTOR) matches elements by tag/attribute
   // only — it has no idea an ancestor is display:none — so without this
-  // filter the trap would still cycle Tab onto the [data-play-open-link]
-  // anchor sitting inside the hidden [data-play-live] block. Filtering on
-  // offsetParent !== null excludes anything inside a hidden/display:none
-  // ancestor while keeping everything actually visible in the modal.
+  // filter the trap would still cycle Tab onto controls inside a hidden
+  // part of a modal (e.g. the media modal's inactive chooser/player view).
+  // Filtering on offsetParent !== null excludes anything inside a
+  // hidden/display:none ancestor while keeping everything actually visible
+  // in the modal.
   function getFocusable(container) {
     var all = container.querySelectorAll(FOCUSABLE_SELECTOR);
     var visible = [];
@@ -227,38 +217,17 @@
     if (!triggers.length) return;
 
     var overlay = document.getElementById("googlePlayModal");
-    var comingSoon = overlay ? overlay.querySelector("[data-play-coming-soon]") : null;
-    var liveContent = overlay ? overlay.querySelector("[data-play-live]") : null;
     var openLink = overlay ? overlay.querySelector("[data-play-open-link]") : null;
-    var qrImg = overlay ? overlay.querySelector("[data-play-qr-img]") : null;
-
-    var hasUrl = !!GOOGLE_PLAY_URL;
-
-    if (overlay) {
-      if (hasUrl) {
-        if (comingSoon) comingSoon.hidden = true;
-        if (liveContent) liveContent.hidden = false;
-        if (openLink) openLink.href = GOOGLE_PLAY_URL;
-        if (qrImg) {
-          // A QR image pointed at GOOGLE_PLAY_URL would be generated here
-          // once a real store URL exists. Left unset intentionally — we
-          // do not fabricate a QR code for a link that doesn't exist yet.
-        }
-      } else {
-        if (comingSoon) comingSoon.hidden = false;
-        if (liveContent) liveContent.hidden = true;
-      }
-    }
+    if (openLink) openLink.href = GOOGLE_PLAY_URL;
 
     triggers.forEach(function (trigger) {
       trigger.addEventListener("click", function () {
-        if (hasUrl && isMobileDevice()) {
-          // Mobile with a live URL: go straight to the store, no modal.
+        if (isMobileDevice()) {
+          // Mobile: go straight to the store, no modal.
           window.location.href = GOOGLE_PLAY_URL;
           return;
         }
-        // Desktop, or mobile with no live URL yet: show the accessible modal
-        // (either the QR/"Open Google Play" state, or the Coming Soon state).
+        // Desktop: show the accessible modal (QR + "Open Google Play").
         openModal(overlay);
       });
     });
