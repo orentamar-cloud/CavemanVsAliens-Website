@@ -938,26 +938,16 @@ body.no-scroll { overflow: hidden; }
 .modal-title { font-size: 1.3rem; font-weight: 900; color: var(--text-0); }
 .modal-body-text { margin-top: 10px; color: var(--text-1); font-size: 0.96rem; }
 
+/* The QR PNG carries its own white quiet zone, so the frame is plain white
+   (a scanner needs a light surround) and the image fills it. */
 .modal-qr {
   margin: 22px auto 6px;
   width: 168px; height: 168px;
   border-radius: var(--radius-m);
-  background: var(--bg-card);
-  border: 1.5px dashed var(--line-strong);
-  display: flex; align-items: center; justify-content: center;
-  flex-direction: column; gap: 6px;
-  color: var(--text-2); font-size: 0.72rem; font-weight: 700;
-  letter-spacing: 0.04em; text-align: center; padding: 10px;
+  background: #fff;
+  overflow: hidden;
 }
-.modal-qr img { width: 100%; height: 100%; object-fit: contain; border-radius: var(--radius-s); }
-.modal-qr svg { width: 30px; height: 30px; opacity: 0.6; }
-
-.modal-coming-soon {
-  display: inline-flex; align-items: center; gap: 8px;
-  margin-top: 18px; padding: 10px 18px; border-radius: 999px;
-  background: rgba(255, 214, 10, 0.12); border: 1.5px dashed #ffd60a;
-  color: #ffe066; font-weight: 800; letter-spacing: 0.04em; font-size: 0.82rem;
-}
+.modal-qr img { display: block; width: 100%; height: 100%; object-fit: contain; }
 
 .modal-actions { margin-top: 22px; display: flex; justify-content: center; }
 
