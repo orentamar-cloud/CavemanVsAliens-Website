@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script>document.documentElement.classList.add('js');</script>
   <title>Caveman vs Aliens — Official Android Game Website</title>
-  <meta name="description" content="Caveman vs Aliens is a fast, colorful arcade Android game where a lone caveman fights back an alien invasion — with optional voice commands. Coming to Google Play.">
+  <meta name="description" content="Caveman vs Aliens is a fast, colorful arcade Android game where a lone caveman fights back an alien invasion — with optional voice commands. Available now on Google Play.">
   <link rel="canonical" href="https://cavemanvsaliens.com/">
 
   <!-- Open Graph (placeholders — update image URL and final domain before publishing) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Caveman vs Aliens">
   <meta property="og:title" content="Caveman vs Aliens — Official Android Game Website">
-  <meta property="og:description" content="Survive the invasion. Fight back. Go prehistoric. A fast, colorful arcade game for Android — coming to Google Play.">
+  <meta property="og:description" content="Survive the invasion. Fight back. Go prehistoric. A fast, colorful arcade game for Android — available now on Google Play.">
   <meta property="og:image" content="https://cavemanvsaliens.com/assets/images/hero-final.png">
   <meta property="og:url" content="https://cavemanvsaliens.com/">
   <meta name="twitter:card" content="summary_large_image">
@@ -318,10 +318,9 @@
   </footer>
 
   <!-- ===================== GOOGLE PLAY MODAL (Phase 2) =====================
-       Desktop entry point for the Google Play CTA. On mobile, if a real
-       store URL is set, the CTA skips this modal and navigates directly
-       to the store instead (see assets/js/main.js). Until a real URL
-       exists, this always shows the safe "Coming Soon" state below. -->
+       Desktop entry point for the Google Play CTA. On mobile the CTA skips
+       this modal and navigates directly to the store instead (see
+       assets/js/main.js). -->
   <div class="modal-overlay" id="googlePlayModal" role="dialog" aria-modal="true" aria-labelledby="googlePlayModalTitle">
     <div class="modal-card">
       <button class="modal-close" type="button" aria-label="Close">
@@ -332,12 +331,10 @@
       </div>
       <h2 class="modal-title" id="googlePlayModalTitle">Get Caveman vs Aliens</h2>
 
-      <div data-play-live hidden>
+      <div data-play-live>
         <p class="modal-body-text">Scan to download on Android</p>
         <div class="modal-qr">
-          <img data-play-qr-img src="" alt="" hidden>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><line x1="14" y1="14" x2="14" y2="21"/><line x1="21" y1="14" x2="21" y2="21"/><line x1="17.5" y1="14" x2="17.5" y2="17.5"/><line x1="14" y1="17.5" x2="21" y2="17.5"/></svg>
-          <span>QR code</span>
+          <img data-play-qr-img src="assets/images/google-play-qr.png" alt="QR code to download Caveman vs Aliens on Google Play" width="540" height="540" decoding="async">
         </div>
         <div class="modal-actions">
           <a class="btn btn-play" data-play-open-link href="#" target="_blank" rel="noopener noreferrer">
@@ -347,11 +344,6 @@
             </span>
           </a>
         </div>
-      </div>
-
-      <div data-play-coming-soon>
-        <p class="modal-body-text">Caveman vs Aliens is on its way to Google Play. The store link and QR code will appear here as soon as it's live — check back soon!</p>
-        <span class="modal-coming-soon">Coming Soon</span>
       </div>
     </div>
   </div>
